@@ -1,70 +1,128 @@
 <!-- AIzaSyAvA524q6UgIl5fGmsgOHzhgK4tr-Q1dHc -->
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <title>ChatGPT-Like Interface</title>
+    <link rel="stylesheet" href="www/style.css">
+    <script src="www/default.js" defer></script>
 </head>
 <body>
-    <div id="chat-container">
-        <div id="chat-display"></div>
-        <input type="text" id="user-input" placeholder="Type a message...">
-        <button id="send-button">Send</button>
+  <nav class="top-nav">
+  <div class="nav-container">
+    <div id="nav-btn" class='bx bx-menu'></div>
+    <div class="nav-menu">
+      <span class="nav-item">About</span>
+      <span class="nav-item">About Us</span>
+      <span class="nav-item">Gemini API</span>
     </div>
+  </div>
+  <nav>
+    <p>version 1.1.0</p>
+  </nav>
+</nav>
 
-    <script type="importmap">
-        {
-            "imports": {
-                "@google/generative-ai": "https://esm.run/@google/generative-ai"
+   <div id="chat-container">
+    <div class="default-text" id="default-text">
+        <!-- <h1>Hello, There!</h1> -->
+        <img src="www/images/hello.png" alt="" class="hello" />
+        <p id="sub" style="font-size: 12px;">Gemli at your service. Feel free to start a conversation or ask questions</p><br><br><br><br><br><br>
+        <p id="intro">Experience Gemli, powered by Google's Gemini API—an AI that offers advanced language generation, considering its limitations set by Google.</p>
+    </div>
+    <div id="chat-display"></div>
+    <div id="user-input-container">
+    <input type="text" id="user-input" placeholder="Enter a prompts here...">
+    <i class='bx bx-send' id="send-button"></i>
+</div>
+
+    <div id="footer">
+        Gemli powered by Gemini API &copy; 2023
+    </div>
+</div>
+
+
+<script type="importmap">
+    {
+        "imports": {
+            "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+    }
+</script>
+<script type="module">
+    import { GoogleGenerativeAI } from "@google/generative-ai";
+
+    const genAI = new GoogleGenerativeAI("AIzaSyAvA524q6UgIl5fGmsgOHzhgK4tr-Q1dHc"); // Replace with your actual API key
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+    document.getElementById('send-button').addEventListener('click', sendMessage);
+
+    async function sendMessage() {
+        const userInput = document.getElementById('user-input').value;
+        console.log('User Input:', userInput);
+
+        try {
+            const result = await model.generateContent(userInput);
+            const response = await result.response;
+            const modelResponse = response.text();
+            console.log('Model Response:', modelResponse);
+
+            displayMessage('User', userInput, 'user-message');
+            displayMessage('Gemli', modelResponse, 'model-message');
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+
+        document.getElementById('user-input').value = '';
+    }
+
+    function displayMessage(sender, message, className) {
+        const chatDisplay = document.getElementById('chat-display');
+        const messageElement = document.createElement('div');
+        messageElement.className = className;
+
+        // Add margin to create distance between user and chatbot messages
+        if (sender.toLowerCase() === 'user') {
+            messageElement.style.marginBottom = '8px'; // Adjust the distance as needed
+            messageElement.innerHTML = '<img src="www/images/user.jpg" alt="User Image">';
+        } else {
+            messageElement.style.marginTop = '8px'; // Adjust the distance as needed
+            messageElement.innerHTML = '<img src="www/images/gemli.jpg" alt="Gemli Image">';
+        }
+
+        // Check if the response contains newlines or specific keywords for formatting
+        if (message.includes('\n')) {
+            // If the message has newlines, treat it as a multiline message
+            const lines = message.split('\n');
+            if (lines.every(line => line.startsWith(' '))) {
+                // If all lines start with a space, treat it as code
+                messageElement.innerHTML += `<pre>${lines.map(line => line.trim()).join('\n')}</pre>`;
+            } else {
+                messageElement.innerHTML += `<br>${lines.join('<br>')}`;
             }
-        }
-    </script>
-    <script type="module">
-        import { GoogleGenerativeAI } from "@google/generative-ai";
-
-        const genAI = new GoogleGenerativeAI("AIzaSyAvA524q6UgIl5fGmsgOHzhgK4tr-Q1dHc"); // Replace with your actual API key
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-
-        document.getElementById('send-button').addEventListener('click', sendMessage);
-
-        async function sendMessage() {
-            const userInput = document.getElementById('user-input').value;
-            console.log('User Input:', userInput);
-
-            try {
-                const result = await model.generateContent(userInput);
-                const response = await result.response;
-                const modelResponse = response.text();
-                console.log('Model Response:', modelResponse);
-
-                displayMessage('User', userInput);
-                displayMessage('Model', modelResponse);
-
-            } catch (error) {
-                console.error('Error:', error);
-            }
-
-            document.getElementById('user-input').value = '';
+        } else if (message.toLowerCase().includes('list')) {
+            // If the message contains the word 'list', format it as a list
+            const items = message.split(';').map(item => item.trim());
+            const listItems = items.map(item => `<li>${item}</li>`).join('');
+            messageElement.innerHTML += `<ul>${listItems}</ul>`;
+        } else {
+            // Default formatting for regular messages
+            messageElement.innerHTML += parseBoldSyntax(message);
         }
 
-        function displayMessage(sender, message) {
-            const chatDisplay = document.getElementById('chat-display');
-            const messageElement = document.createElement('div');
-            messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
-            chatDisplay.appendChild(messageElement);
+        chatDisplay.appendChild(messageElement);
 
-            // Scroll to the bottom of the chat display
-            chatDisplay.scrollTop = chatDisplay.scrollHeight;
-        }
-    </script>
+        // Scroll to the bottom of the chat display
+        chatDisplay.scrollTop = chatDisplay.scrollHeight;
+    }
+
+    function parseBoldSyntax(text) {
+        return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    }
+</script>
+
+
 </body>
 </html>
