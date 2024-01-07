@@ -1,0 +1,337 @@
+<!-- AIzaSyAvA524q6UgIl5fGmsgOHzhgK4tr-Q1dHc -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Syetem</title>
+        <style>
+            body {
+                background-color: #0C0C0C;
+                color: #F1F1F1;
+                font-family: "Courier New", monospace;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+                overflow: hidden;
+                font-size: 12px;
+            }
+
+            #chat-container {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                padding: 10px;
+                box-sizing: border-box;
+            }
+
+            #chat-display {
+                flex: 1;
+                overflow-y: auto;
+                padding: 10px;
+                margin-bottom: 10px;
+                scrollbar-width: thin;
+                scrollbar-color: #F1F1F1;
+            }
+
+            #chat-display::-webkit-scrollbar {
+                width: 10px; /* Adjust the width of the scrollbar */
+            }
+
+            #chat-display::-webkit-scrollbar-thumb {
+                background-color: #F1F1F1; /* Adjust the color of the scrollbar thumb */
+            }
+
+            #chat-display::-webkit-scrollbar-track {
+                background-color: #0C0C0C; /* Adjust the color of the scrollbar track */
+            }
+
+            #user-input {
+                padding: 5px;
+                margin-right: 5px;
+                border: none;
+                border-bottom: 1px solid #F1F1F1;
+                background-color: transparent;
+                color: #F1F1F1;
+                outline: none;
+                font-family: "Courier New", monospace;
+            }
+            #user-input:focus {
+                background: transparent; 
+            }
+
+            #send-button {
+                padding: 5px;
+                background-color: transparent;
+                outline: none;
+                border: none;
+                color: #F1F1F1;
+                cursor: pointer;
+                font-size: 12px;
+                font-family: "Courier New", monospace;
+            }
+
+            .user-message, .model-message {
+                color: #F1F1F1;
+                margin-bottom: 10px;
+            }
+
+            .user-prefix {
+                color: #008F11;
+                font-weight: bold !important;
+            }
+            .model-prefix {
+                color: #008F11;
+                font-weight: bold !important;
+            }
+
+            #intro {
+                color: #F1F1F1;
+                border-bottom: 1px solid #757575;
+                font-size: 10px;
+            }
+
+            #code-container {
+                padding: 10px;
+                box-sizing: border-box;
+            }
+
+            :not(pre) > code[class*="language-"],
+            pre[class*="language-"] {
+                background: #fff;
+            }
+
+            :not(pre) > code {
+                background: #f0f0f0;
+                padding: 2px 4px;
+                border-radius: 4px;
+            }
+
+            pre[class*="language-"] {
+                margin: 1em 0;
+                overflow: auto;
+            }
+
+            code[class*="language-"],
+            pre[class*="language-"] {
+                color: #fff;
+                background: 0 0;
+                font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono",
+                    monospace;
+                font-size: 1em;
+                white-space: pre;
+                line-height: 1.5;
+                tab-size: 4;
+            }
+
+            pre {
+                display: block;
+                font-family: monospace;
+                white-space: pre;
+                margin: 1em 0;
+            }
+        </style>
+        <script>
+let rainCanvas = null;
+
+function createMatrixRain() {
+  rainCanvas = document.createElement("canvas");
+  const context = rainCanvas.getContext("2d");
+  document.body.appendChild(rainCanvas);
+
+  const fontSize = 16;
+  const columns = Math.floor(window.innerWidth / fontSize);
+  const drops = [];
+  for (let i = 0; i < columns; i++) {
+    drops.push(0);
+  }
+
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charArray = characters.split("");
+
+  rainCanvas.width = window.innerWidth;
+  rainCanvas.height = window.innerHeight;
+  rainCanvas.style.position = "fixed";
+  rainCanvas.style.top = "0";
+  rainCanvas.style.left = "0";
+  rainCanvas.style.zIndex = "-1";
+
+  function draw() {
+    context.fillStyle = "rgba(0,0,0,0.20)";
+    context.fillRect(0, 0, rainCanvas.width, rainCanvas.height);
+    context.font = "700 " + fontSize + "px monospace";
+    context.fillStyle = "#75a99c";
+
+    for (let i = 0; i < columns; i++) {
+      const char = charArray[Math.floor(Math.random() * charArray.length)];
+      const x = i * fontSize;
+      const y = drops[i] * fontSize;
+      context.fillText(char, x, y);
+
+      if (y >= rainCanvas.height && Math.random() > 0.99) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  draw();
+  setInterval(draw, 35);
+}
+
+// Invoke the createMatrixRain function when the DOM is ready
+document.addEventListener('DOMContentLoaded', createMatrixRain);
+
+        </script>
+    </head>
+
+    <body>
+        <div id="chat-container">
+            <p id="intro">
+                Natural Language Processing (NLP) Chatbot [version 1.1.0]<br/>
+                considering its limitations set by Google<br>>_PatrIck Ogalesco
+            </p>
+            <div id="chat-display"></div>
+            <div style="display: flex; align-items: center">
+                c: \user\
+                <input type="text" id="user-input" placeholder="prompts here" />
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "@google/generative-ai": "https://esm.run/@google/generative-ai"
+                }
+            }
+        </script>
+
+        <script type="module">
+                import { GoogleGenerativeAI } from "@google/generative-ai";
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    const chatContainer = document.getElementById('chat-display');
+                    const userInput = document.getElementById('user-input');
+                    const sendButton = document.getElementById('send-button');
+
+                    // Load Prism for code highlighting
+                    import('https://cdn.jsdelivr.net/npm/prismjs@1.25.0/components/prism-core.min.js').then(() => {
+                        // Load specific Prism language components if needed
+                        import('https://cdn.jsdelivr.net/npm/prismjs@1.25.0/components/prism-javascript.min.js');
+                        import('https://cdn.jsdelivr.net/npm/prismjs@1.25.0/components/prism-css.min.js');
+                        import('https://cdn.jsdelivr.net/npm/prismjs@1.25.0/components/prism-markup.min.js');
+
+                        // Call Prism.highlightAll() to highlight all code blocks on the page
+                        Prism.highlightAll();
+                    });
+
+                    const genAI = new GoogleGenerativeAI("AIzaSyAvA524q6UgIl5fGmsgOHzhgK4tr-Q1dHc");
+                    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+                    sendButton.addEventListener('click', sendMessage);
+
+                    async function sendMessage() {
+                        const userPrompt = userInput.value.trim();
+
+                        if (userPrompt === '') {
+                            return;
+                        }
+                        sendButton.disabled = true;
+
+                        try {
+                            displayMessage('User', userPrompt, 'user-message');
+
+                            const result = await model.generateContent(userPrompt);
+                            const response = await result.response;
+                            const modelResponse = response.text();
+                            console.log('Model Response:', modelResponse);
+
+                            // Display model response
+                            displayMessage('Model', modelResponse, 'model-message');
+                        } catch (error) {
+                            console.error('Error:', error);
+                        } finally {
+                            // Enable send button
+                            sendButton.disabled = false;
+
+                            // Clear input area
+                            userInput.value = '';
+                        }
+                    }
+
+                    function displayMessage(sender, message, className) {
+                const messageElement = document.createElement('div');
+                messageElement.className = className;
+
+                const contentElement = document.createElement('div');
+
+                if (isCodeBlock(message)) {
+                    const codeElement = document.createElement('pre');
+                    const codeContainer = document.createElement('code');
+                    codeContainer.className = 'language-java'; // Change this based on the language
+                    codeContainer.textContent = message.trim().replace(/^```java\n/, '').replace(/```$/, ''); // Extract code content
+                    codeElement.appendChild(codeContainer);
+                    contentElement.appendChild(codeElement);
+
+                    // Apply syntax highlighting with Prism
+                    Prism.highlightElement(codeContainer);
+                } else {
+                    contentElement.innerHTML = parseParagraph(message);
+                }
+
+                messageElement.appendChild(contentElement);
+
+                // Add a user or Gemli prefix based on the sender
+                const prefixElement = document.createElement('span');
+                prefixElement.className = sender.toLowerCase() === 'user' ? 'user-prefix' : 'model-prefix';
+                prefixElement.textContent = `${sender.toLowerCase() === 'user' ? 'User:' : 'Model:'} `;
+                contentElement.insertBefore(prefixElement, contentElement.firstChild);
+
+                chatContainer.appendChild(messageElement);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+
+
+
+                    function isCodeBlock(text) {
+                        return text.trim().startsWith('```');
+                    }
+
+                    function parseParagraph(text) {
+                        // Your existing code for parsing normal paragraphs
+                        const lines = text.split('\n');
+                        const parsedLines = lines.map(line => {
+                            if (line.trim().startsWith('Gemli:')) {
+                                return line.replace(/^Gemli:/, '<strong>Gemli:</strong>');
+                            } else if (
+                                line.trim().startsWith('1.') || line.trim().startsWith('2.') ||
+                                line.trim().startsWith('3.') || line.trim().startsWith('4.') ||
+                                line.trim().startsWith('5.') || line.trim().startsWith('6.') ||
+                                line.trim().startsWith('7.') || line.trim().startsWith('8.') ||
+                                line.trim().startsWith('9.') || line.trim().startsWith('10.')
+                            ) {
+                                return line.replace(/\*\*(.*?)\*\*/g, '$1');
+                            } else {
+                                return line;
+                            }
+                        });
+                        return parsedLines.join('<br>');
+                    }
+
+                    function typeMessage(message, element) {
+                        let i = 0;
+                        const typingInterval = setInterval(() => {
+                            element.innerHTML = message.substring(0, i);
+                            i++;
+                            if (i > message.length) {
+                                clearInterval(typingInterval);
+                            }
+                        }, 25); // Adjust the typing speed by changing the interval (milliseconds)
+                    }
+                });
+        </script>
+    </body>
+</html>
