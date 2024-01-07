@@ -232,6 +232,7 @@ document.addEventListener('DOMContentLoaded', createMatrixRain);
                     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
                     sendButton.addEventListener('click', sendMessage);
+                    sendButton.addEventListener('touchend', sendMessage)
 
                     async function sendMessage() {
                         const userPrompt = userInput.value.trim();
