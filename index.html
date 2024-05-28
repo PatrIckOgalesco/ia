@@ -7,6 +7,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<title>NLP AI</title>
 	<style>
+		* {
+		  margin: 0;
+		  padding: 0;
+		  box-sizing: border-box;
+		}
+
 		body {
 			background-color: #2B2B2B;
 			color: #F1F1F1;
@@ -18,7 +24,7 @@
 			flex-direction: column;
 			height: 100vh;
 			overflow: hidden;
-			font-size: 13px;
+			font-size: 10px;
 		}
 
 		#chat-container {
@@ -137,6 +143,7 @@
 
 
 		#intro {
+			font-size: 10px;
 			color: #F1F1F1;
 			padding: 10px 20px;
 			width: 100%;
@@ -335,16 +342,16 @@
                 </div>
             </aside>
             <p id="intro">
-                ~ $ Natural Language Processing (NLP) | Chatbot [Version 1.1.0]<br/>
+            	~ $ Welcome to the AI Chatbot Experience!<br/>
+                ~ $ Natural Language Processing | Chatbot [Version 1.1.0]<br/>
                 ~ $ Considering its limitations set by Google<br/>
-                ~ $ This was made by <span> &lt;\&gt;Patrick Ogalesco</span><br/>
-                ~ $ Welcome to the AI Chatbot Experience!<br/>
+                ~ $ This was made by <span> &lt;\&gt;John Patrick Ogalesco</span><br/>
                 ~ $ Your environment has been set up | Type anything to start a conversation with AI
             </p>
             <div id="chat-display" data-simplebar></div>
             <div style="display: flex; align-items: center" id="inputtext">
                 C:\ Users\ prompts >
-                <input type="text" id="user-input" placeholder="_enter here...." />
+                <input type="text" id="user-input" placeholder="_enter here...." autocomplete="off" />
                 <button id="send-button">[Send]</button>
             </div>
         </div>
