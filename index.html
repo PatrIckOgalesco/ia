@@ -8,15 +8,16 @@
 	<title>NLP AI</title>
 	<style>
 		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
+		  margin: 0;
+		  padding: 0;
+		  box-sizing: border-box;
 		}
 
 		body {
 			background-color: #2B2B2B;
 			color: #F1F1F1;
-			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco,
+				Consolas, "Liberation Mono", "Courier New", monospace;
 			margin: 0;
 			padding: 0;
 			display: flex;
@@ -38,21 +39,19 @@
 			display: flex;
 			flex-direction: column;
 			height: 100%;
-			padding: 10px;
+			padding: 50px;
 			box-sizing: border-box;
 			max-width: 100%;
-			overflow: hidden;
 		}
 
 		#chat-display {
 			flex: 1;
 			overflow-y: auto;
 			padding: 10px 20px;
-			margin-bottom: 1px;
-			max-height: calc(100vh - 120px);
 			background-color: #0C0C0C;
 			scrollbar-width: thin;
 			scrollbar-color: #F1F1F1 #0C0C0C;
+			background-color: #0C0C0C;
 		}
 
 		#chat-display::-webkit-scrollbar {
@@ -77,15 +76,18 @@
 			background-color: transparent;
 			color: #F1F1F1;
 			outline: none;
-			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco,
+				Consolas, "Liberation Mono", "Courier New", monospace;
 			border-radius: 0;
 			width: 150px;
 		}
 
 		#inputtext {
-			padding: 10px;
+			padding: 10px 10px;
 			background-color: #0C0C0C;
-			bottom: 0 !important;
+			display: flex;
+			align-items: center;
+			border-top: 1px solid #282828;
 		}
 
 		#user-input:focus {
@@ -100,7 +102,8 @@
 			color: #F1F1F1;
 			cursor: pointer;
 			font-size: 12px;
-			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco,
+				Consolas, "Liberation Mono", "Courier New", monospace;
 		}
 
 		.user-message,
@@ -122,22 +125,22 @@
 		.model-message strong {
 			font-weight: bold;
 		}
-
 		pre {
 			background-color: #1E1E1E;
-			color: #CCCCCC;
-			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-			line-height: 1.5;
+			color: #CCCCCC; 
+			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco,
+				Consolas, "Liberation Mono", "Courier New", monospace;
+			line-height: 1.5; 
 			padding: 10px;
 			border: 1px solid #333;
 			overflow: auto;
-			white-space: pre-wrap;
-			word-wrap: break-word;
+			white-space: pre-wrap; 
+			word-wrap: break-word; 
 		}
-
 		pre:active {
 			border-color: #50d5d9;
 		}
+
 
 		#intro {
 			font-size: 10px;
@@ -146,10 +149,10 @@
 			width: 100%;
 			background-color: #0C0C0C;
 		}
-
-		span {
+		span{
 			color: #50d5d9;
-			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco,
+				Consolas, "Liberation Mono", "Courier New", monospace;
 			font-weight: bold;
 		}
 	</style>
@@ -167,6 +170,7 @@
 		::before {
 			--tw-content: ''
 		}
+
 
 		html {
 			line-height: 1.5;
@@ -310,30 +314,17 @@
 			#terminal {
 				padding: 6px 100px;
 			}
+		
 		}
 
 		@media (max-width: 767px) {
-			body {
+			body{
 				font-size: 10px;
 			}
-
 			#terminal {
 				padding: 6px;
 			}
-
-			#user-input {
-				font-size: 10px;
-				width: 120px;
-			}
-
-			#send-button {
-				font-size: 10px;
-			}
-
-			pre {
-				font-size: 10px;
-			}
-		}
+	   }
 	</style>
 </head>
 
